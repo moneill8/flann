@@ -41,6 +41,7 @@
 #include "flann/algorithms/hierarchical_clustering_index.h"
 #include "flann/algorithms/lsh_index.h"
 #include "flann/algorithms/autotuned_index.h"
+#include "flann/algorithms/graph_index.h"
 #ifdef FLANN_USE_CUDA
 #include "flann/algorithms/kdtree_cuda_3d_index.h"
 #endif
@@ -181,6 +182,9 @@ inline NNIndex<Distance>*
 		break;
 	case FLANN_INDEX_LSH:
 		nnIndex = create_index_<LshIndex,Distance,ElementType>(dataset, params, distance);
+		break;
+	case GRAPH_INDEX:
+		nnIndex = create_index_<GraphIndex,Distance,ElementType>(dataset, params, distance);
 		break;
 	default:
 		throw FLANNException("Unknown index type");
