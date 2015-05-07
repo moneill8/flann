@@ -6,11 +6,11 @@
 #include <set>
 
 #define RANGE 100000
-#define N 4000
-#define D 10
-#define K 3
-#define ALPHA 8
-#define BETA 8
+#define N 1000
+#define D 20
+#define K 5
+#define ALPHA 9
+#define BETA 9
 
 using namespace std;
 
@@ -44,23 +44,19 @@ ll dist_sqr(vi one, vi two) {
     return dist;
 }
 
-bool maybe_add(set<ii> &best, ll i, ll j, ll k, vvi &points) {
-    if (i == j) return false;
+void maybe_add(set<ii> &best, ll i, ll j, ll k, vvi &points) {
+    if (i == j) return;
     
-    ll cur_dist = dist_sqr(points[i], points[j]);
+    double cur_dist = dist_sqr(points[i], points[j]);
     if (best.size() < k) {
         best.insert(ii(cur_dist, j));
-        return true;
     }
     else if (cur_dist < best.rbegin()->first) {
         set<ii>::iterator it = best.end();
         --it;
         best.erase(it);
         best.insert(ii(cur_dist, j));
-        return true;
-    }
-
-    return false;
+    }     
 }
 
 //O(n^2d)
@@ -88,6 +84,7 @@ vector<set<ll> > exact_kNN(vvi &points, ll k) {
 //O(nda^2b), set a=b=log(n) and get O(n log^3 n)
 vvi approx_kNN(vvi &points, ll k, ll alpha, ll beta) {
     vector<set<ii> > best(points.size());
+    vector<ll> has_me(points.size());
 
     for (ll i = 0; i < points.size(); ++i) {
         for (ll j = 0; j < alpha; ++j) {
@@ -98,6 +95,7 @@ vvi approx_kNN(vvi &points, ll k, ll alpha, ll beta) {
             }
 
             best[i].insert(ii(dist_sqr(points[i], points[m]), m));
+            has_me[m].insert(i);
         }
     }
 
@@ -109,7 +107,10 @@ vvi approx_kNN(vvi &points, ll k, ll alpha, ll beta) {
                 for (set<ii>::iterator it2 = best[it1->second].begin(); it2 != best[it1->second].end(); ++it2) {
                     maybe_add(new_best[j], j, it2->second, alpha, points);
                 }
-                maybe_add(new_best[it1->second], it1->second, j, alpha, points);
+            }
+
+            for (ll m = 0; m < has_me.size(); ++m) {
+                
             }
         }
 
