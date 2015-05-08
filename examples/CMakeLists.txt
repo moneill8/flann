@@ -22,6 +22,15 @@ if (HDF5_FOUND)
     add_dependencies(examples flann_example_cpp)
     install (TARGETS flann_example_cpp DESTINATION bin)
 
+	add_executable(new_example_cpp new_example.cpp)
+    target_link_libraries(new_example_cpp ${HDF5_LIBRARIES} flann_cpp)
+    if (HDF5_IS_PARALLEL)
+        target_link_libraries(new_example_cpp ${MPI_LIBRARIES})
+    endif()
+
+    add_dependencies(examples new_example_cpp)
+    install (TARGETS new_example_cpp DESTINATION bin)
+
 
     if (USE_MPI AND HDF5_IS_PARALLEL)
         add_executable(flann_example_mpi flann_example_mpi.cpp)

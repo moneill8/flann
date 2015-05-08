@@ -218,6 +218,7 @@ public:
 		int maxChecks = searchParams.checks;
 
         graphSearch(result, vec, nodes_, maxChecks, epsError);
+		
     }
 
 protected:
@@ -229,7 +230,7 @@ protected:
     {
         nodes_.resize(size_);
 		createNodes(nodes_);
-        createGraph(nodes_);
+		createGraph(nodes_);
     }
 
 private:
@@ -357,7 +358,7 @@ private:
 				result_set.addPoint(currdist, current->index);
 			}
 			checked[current->index] = 1;
-
+			
 			DistanceType mindist = distance_(current->edgeset[0]->dest->ele, vec, veclen_);
 			min->dist = mindist;
 			min->node = current->edgeset[0]->dest;
@@ -373,7 +374,7 @@ private:
 						DistanceType d = distance_(current->edgeset[j]->dest->ele, vec, veclen_);
 						if(d < min->dist) {
 							min->dist = d;
-							min->node = current->edgeset[i]->dest;
+							min->node = current->edgeset[j]->dest;
 						}
 						if(d < result_set.worstDist()) {
 							result_set.addPoint(d, current->edgeset[j]->dest->index);
