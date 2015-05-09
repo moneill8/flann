@@ -44,6 +44,15 @@ if (HDF5_FOUND)
     add_dependencies(examples test_code)
     install (TARGETS test_code DESTINATION bin)
 
+	add_executable(linear_test linear_test.cpp)
+    target_link_libraries(linear_test ${HDF5_LIBRARIES} flann_cpp)
+    if (HDF5_IS_PARALLEL)
+        target_link_libraries(linear_test ${MPI_LIBRARIES})
+    endif()
+
+    add_dependencies(examples linear_test)
+    install (TARGETS linear_test DESTINATION bin)
+
     if (USE_MPI AND HDF5_IS_PARALLEL)
         add_executable(flann_example_mpi flann_example_mpi.cpp)
         target_link_libraries(flann_example_mpi flann_cpp ${HDF5_LIBRARIES} ${MPI_LIBRARIES} ${Boost_LIBRARIES})

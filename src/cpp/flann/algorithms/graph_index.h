@@ -36,6 +36,8 @@
 #include <cassert>
 #include <cstring>
 #include <queue>
+#include <time.h>
+
 
 #include "flann/general.h"
 #include "flann/algorithms/nn_index.h"
@@ -52,11 +54,12 @@ namespace flann
 //TODO: Figure out what parameters to use
 struct GraphIndexParams : public IndexParams
 {
-    GraphIndexParams(int gnn = 3)
+    GraphIndexParams(int gnn = 25, int e = 25)
     {
         (*this)["algorithm"] = GRAPH_INDEX;
         (*this)["gnn"] = gnn;
-    }
+    	(*this)["e"] = e;
+	}
 };
 
 
@@ -84,7 +87,9 @@ public:
     GraphIndex(const IndexParams& params = GraphIndexParams(), Distance d = Distance() ) :
         BaseClass(params, d)
     {
-    	gnn_ = get_param(params, "gnn", 3);
+    	gnn_ = get_param(params, "gnn", 25);
+		e_ = get_param(params, "e", 25);
+		if(e_ > gnn_) e_ = gnn_;
 	}
 
     /**
@@ -97,8 +102,10 @@ public:
     GraphIndex(const Matrix<ElementType>& inputData, const IndexParams& params = GraphIndexParams(),
                       Distance d = Distance() ) : BaseClass(params, d)
     {
-		gnn_ = get_param(params, "gnn", 3);
-        setDataset(inputData);
+		gnn_ = get_param(params, "gnn", 25);
+        e_ = get_param(params, "e", 25);
+		if(e_ > gnn_) e_ = gnn_;
+		setDataset(inputData);
     }
 
 	//TODO: Set up copy constructor
@@ -348,27 +355,25 @@ private:
     void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const float epsError) const
     {
 		//Don't add same node twice
+		srand(time(NULL));
 		int* checked = new int[nodes.size()]();
 		NodeTuple* min = new NodeTuple();
 		for(int i=0; i < maxChecks; i++) {
 			int startIndex = rand_int(nodes.size());
+			if(checked[startIndex] == 1) continue;
 			NodePtr current = nodes[startIndex];
 			DistanceType currdist = distance_(current->ele, vec, veclen_);	
-			if(checked[current->index] == 0) {
-				result_set.addPoint(currdist, current->index);
-			}
+			result_set.addPoint(currdist, current->index);
 			checked[current->index] = 1;
 			
 			DistanceType mindist = distance_(current->edgeset[0]->dest->ele, vec, veclen_);
 			min->dist = mindist;
 			min->node = current->edgeset[0]->dest;
-			if(min->dist < result_set.worstDist()) {
-				result_set.addPoint(min->dist, min->node->index);
-			}
+			result_set.addPoint(min->dist, min->node->index);
 			checked[min->node->index] = 1;
 
 			while(1) {	
-				for(int j=1; j < current->edgeset.size(); j++) {
+				for(int j=1; j < e_; j++) {
 					if(checked[current->edgeset[j]->dest->index] == 0) {
 						checked[current->edgeset[j]->dest->index] = 1;
 						DistanceType d = distance_(current->edgeset[j]->dest->ele, vec, veclen_);
@@ -376,9 +381,7 @@ private:
 							min->dist = d;
 							min->node = current->edgeset[j]->dest;
 						}
-						if(d < result_set.worstDist()) {
-							result_set.addPoint(d, current->edgeset[j]->dest->index);
-						}
+						result_set.addPoint(d, current->edgeset[j]->dest->index);
 					}
 				}
 				//< not <= so we can't go back to previous node
@@ -425,6 +428,11 @@ private:
 	* Number of nearest neighbors used during graph construction.
 	*/
 	int gnn_;
+
+	/**
+	* Number of node expansions
+	*/
+	int e_;
 
     /**
      * Pooled memory allocator.
