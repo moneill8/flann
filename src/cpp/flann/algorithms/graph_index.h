@@ -37,7 +37,10 @@
 #include <cstring>
 #include <queue>
 #include <time.h>
-
+#include <cstdlib>
+#include <cmath>
+#include <set>
+#include <iostream>
 
 #include "flann/general.h"
 #include "flann/algorithms/nn_index.h"
@@ -48,17 +51,22 @@
 #include "flann/util/random.h"
 #include "flann/util/saving.h"
 
+using namespace std;
+
 namespace flann
 {
 
 //TODO: Figure out what parameters to use
 struct GraphIndexParams : public IndexParams
 {
-    GraphIndexParams(int gnn = 25, int e = 25)
+    GraphIndexParams(int gnn = 25, int e = 25, bool approx = false, int alpha = 8, int beta = 8)
     {
         (*this)["algorithm"] = GRAPH_INDEX;
         (*this)["gnn"] = gnn;
     	(*this)["e"] = e;
+        (*this)["approx"] = approx;
+        (*this)["alpha"] = alpha;
+        (*this)["beta"] = beta;
 	}
 };
 
@@ -90,7 +98,11 @@ public:
     	gnn_ = get_param(params, "gnn", 25);
 		e_ = get_param(params, "e", 25);
 		if(e_ > gnn_) e_ = gnn_;
-	}
+	
+        approx_ = get_param(params, "approx", false);
+        beta_ = get_param(params, "beta", 8);
+        alpha_ = get_param(params, "alpha", 8);
+    }
 
     /**
      * KDTree constructor
@@ -105,6 +117,11 @@ public:
 		gnn_ = get_param(params, "gnn", 25);
         e_ = get_param(params, "e", 25);
 		if(e_ > gnn_) e_ = gnn_;
+
+        approx_ = get_param(params, "approx", false);
+        beta_ = get_param(params, "beta", (int)(log(inputData.rows)+1));
+        alpha_ = get_param(params, "alpha", (int)(log(inputData.rows)+1));
+
 		setDataset(inputData);
     }
 
@@ -237,11 +254,14 @@ protected:
     {
         nodes_.resize(size_);
 		createNodes(nodes_);
-		createGraph(nodes_);
+		
+        if (approx_)
+            createApproxGraph(nodes_);
+        else
+            createGraph(nodes_);
     }
 
 private:
-
 
     /*--------------------- Internal Data Structures --------------------------*/
 	struct Edge;
@@ -264,14 +284,13 @@ private:
 	{
 		NodePtr node;
 		DistanceType dist;
-		
 	} NodeTuple;
 
 	struct OrderByDist
 	{
 		bool operator() (NodeTuple* &n1, NodeTuple* &n2) { return n1->dist < n2->dist; }
 	};
-
+    
 	//TODO: Serialize via old code
 	
     void freeIndex()
@@ -306,7 +325,82 @@ private:
 			nodes[i] = node;
 		}
 	}
-	
+
+    typedef pair<DistanceType, int> di;
+
+    // handles adding to priority queue (set) if better
+    bool maybe_add(set<di> &best, int i, int j, int alpha, vector<NodePtr> &nodes) {
+        if (i == j) return false;
+        
+        DistanceType d = distance_(nodes[i]->ele, nodes[j]->ele, veclen_);
+        if (best.size() < alpha) {
+            best.insert(di(d, j));
+            return true;
+        }
+        else if (d < best.rbegin()->first) {
+            di cur(d, j);
+            if (best.count(cur)) return false;
+
+            typename set<di>::iterator it = best.end();
+            --it;
+            best.erase(it);
+            best.insert(di(d, j));
+            return true;
+        }
+
+        return false;
+    }
+
+    //Add edges for APPROX graph
+    void createApproxGraph(vector<NodePtr> &nodes) {
+        vector<set<di> > best(nodes.size());
+        for (int i = 0; i < nodes.size(); ++i) {
+            for (int j = 0; j < alpha_; ++j) {
+                int m = rand()%nodes.size();
+                if (m == i) {
+                    --j;
+                    continue;
+                }
+
+                maybe_add(best[i], i, m, alpha_, nodes);
+            }
+        }
+
+        for (int i = 0; i < beta_; ++i) {
+            vector<set<di> > new_best = best;
+
+            for (int j = 0; j < nodes.size(); ++j) {
+                for (typename set<di>::iterator it1 = best[j].begin(); it1 != best[j].end(); ++it1) {
+                    for (typename set<di>::iterator it2 = best[it1->second].begin(); it2 != best[it1->second].end(); ++it2) {
+                        // try adding neighbor's neighbors
+                        maybe_add(new_best[j], j, it2->second, alpha_, nodes);
+                    }
+                    // try making neighbor add me
+                    maybe_add(new_best[it1->second], it1->second, j, alpha_, nodes);
+                }
+            }
+
+            best = new_best;
+        }
+
+        int added = 0;
+        for (int i = 0; i < nodes.size(); ++i) {
+            int j = 0;
+            for (typename set<di>::iterator it = best[i].begin(); it != best[i].end(); ++it) {
+                if (j == gnn_) break;
+                ++j;
+
+                EdgePtr e = new (pool_) Edge();
+                e->src = nodes[i];
+                e->dest = nodes[it->second];
+                nodes[i]->edgeset.push_back(e);
+                ++added;
+            }
+        }
+
+        cerr << "added: " << added << endl;
+    }
+
 	//Add edges for EXACT graph
 	//TODO: Approximate graph construction
 	void createGraph(std::vector<NodePtr> &nodes) {
@@ -433,6 +527,15 @@ private:
 	* Number of node expansions
 	*/
 	int e_;
+
+    /**
+     * Run approximate graph building algorithm
+     */
+    bool approx_;
+
+    int alpha_;
+
+    int beta_;
 
     /**
      * Pooled memory allocator.

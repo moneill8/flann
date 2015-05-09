@@ -1,5 +1,6 @@
 #include <flann/flann.hpp>
 #include <flann/io/hdf5.h>
+#include<set>
 
 #include <stdio.h>
 
@@ -28,19 +29,42 @@ int main(int argc, char** argv)
     vector<vector<int> > indices;
     vector<vector<float> > dist;
 
-    // construct an randomized kd-tree index using 4 kd-trees
-    Index<L2<float> > index(dataset, flann::KDTreeIndexParams(4));
+    Index<L2<float> > index(dataset, flann::LinearIndexParams());
     index.buildIndex();                                                                                               
 
-    // do a knn search, using 128 checks
-    index.knnSearch(query, indices, dist, nn, flann::SearchParams(128));
+    index.knnSearch(query, indices, dist, nn, flann::SearchParams());
 
+    vector<set<int> > truth(indices.size());
     for (int i = 0; i < indices.size(); ++i) {
         for (int j = 0; j < indices[i].size(); ++j) {
-            cerr << indices[i][j] << " ";
+            truth[i].insert(indices[i][j]);
         }
-        cerr << endl;
     }
+
+    vector<vector<int> > indicesNNGraph;
+    vector<vector<float> > distNNGraph;
+
+    cerr << "rows: " << dataset.rows << endl;
+    //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
+    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(30, 30, true, 30, 10));
+    
+    cerr << "building index" << endl;
+    indexG.buildIndex();
+    cerr << "index built" << endl;
+
+    indexG.knnSearch(query, indicesNNGraph, distNNGraph, nn, flann::SearchParams());
+
+    int correct = 0;
+    for (int i = 0; i < indicesNNGraph.size(); ++i) {
+        for (int j = 0; j < indicesNNGraph[i].size(); ++j) {
+            if (truth[i].count(indicesNNGraph[i][j]))
+                ++correct;
+        }
+    }
+
+    int total = indices.size() * indices[0].size();
+
+    cerr << (double)correct / total << endl;
 
     //flann::save_to_file(indices,"result.hdf5","result");
 
