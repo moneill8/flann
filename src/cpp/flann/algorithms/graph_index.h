@@ -59,11 +59,10 @@ namespace flann
 //TODO: Figure out what parameters to use
 struct GraphIndexParams : public IndexParams
 {
-    GraphIndexParams(int gnn = 25, int e = 25, bool approx = false, int alpha1 = 8, int alpha2 = 8, int beta = 8)
+    GraphIndexParams(int gnn = 25, bool approx = false, int alpha1 = 8, int alpha2 = 8, int beta = 8)
     {
         (*this)["algorithm"] = GRAPH_INDEX;
         (*this)["gnn"] = gnn;
-    	(*this)["e"] = e;
         (*this)["approx"] = approx;
         (*this)["alpha1"] = alpha1;
         (*this)["alpha2"] = alpha2;
@@ -97,8 +96,6 @@ public:
         BaseClass(params, d)
     {
     	gnn_ = get_param(params, "gnn", 25);
-		e_ = get_param(params, "e", 25);
-		if(e_ > gnn_) e_ = gnn_;
 	
         approx_ = get_param(params, "approx", false);
         beta_ = get_param(params, "beta", 8);
@@ -117,8 +114,6 @@ public:
                       Distance d = Distance() ) : BaseClass(params, d)
     {
 		gnn_ = get_param(params, "gnn", 25);
-        e_ = get_param(params, "e", 25);
-		if(e_ > gnn_) e_ = gnn_;
 
         approx_ = get_param(params, "approx", false);
         beta_ = get_param(params, "beta", (int)(log(inputData.rows)+1));
@@ -240,11 +235,12 @@ public:
      */
     void findNeighbors(ResultSet<DistanceType>& result, const ElementType* vec, const SearchParams& searchParams) const
     {
-        float epsError = 1+searchParams.eps;
+        //Number of graph expansions
+		int e = searchParams.e;
 		
 		int maxChecks = searchParams.checks;
 
-        graphSearch(result, vec, nodes_, maxChecks, epsError);
+        graphSearch(result, vec, nodes_, maxChecks, e);
 		
     }
 
@@ -400,7 +396,6 @@ private:
     }
 
 	//Add edges for EXACT graph
-	//TODO: Approximate graph construction
 	void createGraph(std::vector<NodePtr> &nodes) {
 		std::priority_queue<NodeTuple*, std::vector<NodeTuple*>, OrderByDist> current;
 		for(int i=0; i<nodes.size(); i++) {
@@ -444,7 +439,7 @@ private:
     /**
      * Performs maxChecks hill climbing searches in the graph starting from random nodes.
      */
-    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const float epsError) const
+    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const int e) const
     {
 		//Don't add same node twice
 		srand(time(NULL));
@@ -465,7 +460,7 @@ private:
 			checked[min->node->index] = 1;
 
 			while(1) {	
-				for(int j=1; j < e_ && j < current->edgeset.size(); j++) {
+				for(int j=1; j < e && j < current->edgeset.size(); j++) {
 					if(checked[current->edgeset[j]->dest->index] == 0) {
 						checked[current->edgeset[j]->dest->index] = 1;
 						DistanceType d = distance_(current->edgeset[j]->dest->ele, vec, veclen_);
@@ -520,11 +515,6 @@ private:
 	* Number of nearest neighbors used during graph construction.
 	*/
 	int gnn_;
-
-	/**
-	* Number of node expansions
-	*/
-	int e_;
 
     /**
      * Run approximate graph building algorithm

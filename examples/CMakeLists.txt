@@ -53,6 +53,25 @@ if (HDF5_FOUND)
     add_dependencies(examples linear_test)
     install (TARGETS linear_test DESTINATION bin)
 
+	add_executable(kmeans_test kmeans_example.cpp)
+    target_link_libraries(kmeans_test ${HDF5_LIBRARIES} flann_cpp)
+    if (HDF5_IS_PARALLEL)
+        target_link_libraries(kmeans_test ${MPI_LIBRARIES})
+    endif()
+
+    add_dependencies(examples kmeans_test)
+    install (TARGETS kmeans_test DESTINATION bin)
+
+	add_executable(approx_graph_test approx_graph_test.cpp)
+    target_link_libraries(approx_graph_test ${HDF5_LIBRARIES} flann_cpp)
+    if (HDF5_IS_PARALLEL)
+        target_link_libraries(approx_graph_test ${MPI_LIBRARIES})
+    endif()
+
+    add_dependencies(examples approx_graph_test)
+    install (TARGETS approx_graph_test DESTINATION bin)
+
+
     if (USE_MPI AND HDF5_IS_PARALLEL)
         add_executable(flann_example_mpi flann_example_mpi.cpp)
         target_link_libraries(flann_example_mpi flann_cpp ${HDF5_LIBRARIES} ${MPI_LIBRARIES} ${Boost_LIBRARIES})

@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 
     cerr << "rows: " << dataset.rows << endl;
     //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
-    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(100, 100, true, 6, 6, 6));
+    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(100, true, 6, 6, 6));
     
     cerr << "building index" << endl;
     indexG.buildIndex();

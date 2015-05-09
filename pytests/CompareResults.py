@@ -1,10 +1,10 @@
 import h5py
 import numpy as np
 
-f = h5py.File("../build/bin/kdtreeresult.hdf5", "r")
-f2 = h5py.File("../build/bin/linearresult.hdf5", "r")
+f = h5py.File("kmeansout.h5", "r")
+f2 = h5py.File("linear_result.hdf5", "r")
 
-dset = f['result']
+dset = f['kmeansout9']
 dset2 = f2['result']
 
 count = 0;

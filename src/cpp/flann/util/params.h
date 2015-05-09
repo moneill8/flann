@@ -60,8 +60,8 @@ typedef enum {
 
 struct SearchParams
 {
-    SearchParams(int checks_ = 32, float eps_ = 0.0, bool sorted_ = true ) :
-    	checks(checks_), eps(eps_), sorted(sorted_)
+	SearchParams(int checks_ = 32, float eps_ = 0.0, bool sorted_ = true, int e_ = 100000 ) :
+    	checks(checks_), eps(eps_), sorted(sorted_), e(e_)
     {
     	max_neighbors = -1;
     	use_heap = FLANN_Undefined;
@@ -75,7 +75,9 @@ struct SearchParams
     float eps;
     // only for radius search, require neighbours sorted by distance (default: true)
     bool sorted;
-    // maximum number of neighbors radius search should return (-1 for unlimited)
+    //Number of graph node expansions
+	int e;
+	// maximum number of neighbors radius search should return (-1 for unlimited)
     int max_neighbors;
     // use a heap to manage the result set (default: FLANN_Undefined)
     tri_type use_heap;
@@ -83,6 +85,7 @@ struct SearchParams
     int cores;
     // for GPU search indicates if matrices are already in GPU ram
     bool matrices_in_gpu_ram;
+
 };
 
 
