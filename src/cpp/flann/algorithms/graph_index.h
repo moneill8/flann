@@ -59,13 +59,14 @@ namespace flann
 //TODO: Figure out what parameters to use
 struct GraphIndexParams : public IndexParams
 {
-    GraphIndexParams(int gnn = 25, int e = 25, bool approx = false, int alpha = 8, int beta = 8)
+    GraphIndexParams(int gnn = 25, int e = 25, bool approx = false, int alpha1 = 8, int alpha2 = 8, int beta = 8)
     {
         (*this)["algorithm"] = GRAPH_INDEX;
         (*this)["gnn"] = gnn;
     	(*this)["e"] = e;
         (*this)["approx"] = approx;
-        (*this)["alpha"] = alpha;
+        (*this)["alpha1"] = alpha1;
+        (*this)["alpha2"] = alpha2;
         (*this)["beta"] = beta;
 	}
 };
@@ -101,7 +102,8 @@ public:
 	
         approx_ = get_param(params, "approx", false);
         beta_ = get_param(params, "beta", 8);
-        alpha_ = get_param(params, "alpha", 8);
+        alpha1_ = get_param(params, "alpha1", 8);
+        alpha2_ = get_param(params, "alpha2", 8);
     }
 
     /**
@@ -120,7 +122,8 @@ public:
 
         approx_ = get_param(params, "approx", false);
         beta_ = get_param(params, "beta", (int)(log(inputData.rows)+1));
-        alpha_ = get_param(params, "alpha", (int)(log(inputData.rows)+1));
+        alpha1_ = get_param(params, "alpha1", (int)(log(inputData.rows)+1));
+        alpha2_ = get_param(params, "alpha2", (int)(log(inputData.rows)+1));
 
 		setDataset(inputData);
     }
@@ -329,11 +332,11 @@ private:
     typedef pair<DistanceType, int> di;
 
     // handles adding to priority queue (set) if better
-    bool maybe_add(set<di> &best, int i, int j, int alpha, vector<NodePtr> &nodes) {
+    bool maybe_add(set<di> &best, int i, int j, int max_size, vector<NodePtr> &nodes) {
         if (i == j) return false;
         
         DistanceType d = distance_(nodes[i]->ele, nodes[j]->ele, veclen_);
-        if (best.size() < alpha) {
+        if (best.size() < max_size) {
             best.insert(di(d, j));
             return true;
         }
@@ -355,14 +358,10 @@ private:
     void createApproxGraph(vector<NodePtr> &nodes) {
         vector<set<di> > best(nodes.size());
         for (int i = 0; i < nodes.size(); ++i) {
-            for (int j = 0; j < alpha_; ++j) {
+            for (int j = 0; j < gnn_; ++j) {    //TODO: Consider making the starting seed number a variable.
                 int m = rand()%nodes.size();
-                if (m == i) {
-                    --j;
-                    continue;
-                }
 
-                maybe_add(best[i], i, m, alpha_, nodes);
+                maybe_add(best[i], i, m, gnn_, nodes);
             }
         }
 
@@ -370,13 +369,15 @@ private:
             vector<set<di> > new_best = best;
 
             for (int j = 0; j < nodes.size(); ++j) {
-                for (typename set<di>::iterator it1 = best[j].begin(); it1 != best[j].end(); ++it1) {
-                    for (typename set<di>::iterator it2 = best[it1->second].begin(); it2 != best[it1->second].end(); ++it2) {
+                int count1 = 0;
+                for (typename set<di>::iterator it1 = best[j].begin(); it1 != best[j].end() && count1 < alpha1_; ++it1, ++count1) {
+                    int count2 = 0;
+                    for (typename set<di>::iterator it2 = best[it1->second].begin(); it2 != best[it1->second].end() && count2 < alpha2_; ++it2, ++count2) {
                         // try adding neighbor's neighbors
-                        maybe_add(new_best[j], j, it2->second, alpha_, nodes);
+                        maybe_add(new_best[j], j, it2->second, gnn_, nodes);
                     }
                     // try making neighbor add me
-                    maybe_add(new_best[it1->second], it1->second, j, alpha_, nodes);
+                    maybe_add(new_best[it1->second], it1->second, j, gnn_, nodes);
                 }
             }
 
@@ -386,10 +387,7 @@ private:
         int added = 0;
         for (int i = 0; i < nodes.size(); ++i) {
             int j = 0;
-            for (typename set<di>::iterator it = best[i].begin(); it != best[i].end(); ++it) {
-                if (j == gnn_) break;
-                ++j;
-
+            for (typename set<di>::iterator it = best[i].begin(); it != best[i].end() && j < gnn_; ++it, ++j) {
                 EdgePtr e = new (pool_) Edge();
                 e->src = nodes[i];
                 e->dest = nodes[it->second];
@@ -467,7 +465,7 @@ private:
 			checked[min->node->index] = 1;
 
 			while(1) {	
-				for(int j=1; j < e_; j++) {
+				for(int j=1; j < e_ && j < current->edgeset.size(); j++) {
 					if(checked[current->edgeset[j]->dest->index] == 0) {
 						checked[current->edgeset[j]->dest->index] = 1;
 						DistanceType d = distance_(current->edgeset[j]->dest->ele, vec, veclen_);
@@ -533,7 +531,8 @@ private:
      */
     bool approx_;
 
-    int alpha_;
+    int alpha1_;
+    int alpha2_;
 
     int beta_;
 

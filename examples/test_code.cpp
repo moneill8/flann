@@ -20,9 +20,6 @@ int main(int argc, char** argv)
     //load_from_file(dataset, "sift100K.h5", "dataset");
     //load_from_file(query, "sift100K.h5", "query");
     
-    //load_from_file(dataset, "dataset.hdf5","dataset");
-    //load_from_file(query, "dataset.hdf5","query");
-
     //Matrix<int> indices(new int[query.rows*nn], query.rows, nn);
     //Matrix<float> dists(new float[query.rows*nn], query.rows, nn);
 
@@ -46,7 +43,7 @@ int main(int argc, char** argv)
 
     cerr << "rows: " << dataset.rows << endl;
     //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
-    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(30, 30, true, 30, 10));
+    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(100, 100, true, 6, 6, 6));
     
     cerr << "building index" << endl;
     indexG.buildIndex();
