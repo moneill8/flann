@@ -362,7 +362,7 @@ private:
         }
 
         for (int i = 0; i < beta_; ++i) {
-            vector<set<di> > new_best = best;
+            vector<vector<int> > candidate_best(nodes.size());
 
             for (int j = 0; j < nodes.size(); ++j) {
                 int count1 = 0;
@@ -370,14 +370,19 @@ private:
                     int count2 = 0;
                     for (typename set<di>::iterator it2 = best[it1->second].begin(); it2 != best[it1->second].end() && count2 < alpha2_; ++it2, ++count2) {
                         // try adding neighbor's neighbors
-                        maybe_add(new_best[j], j, it2->second, gnn_, nodes);
+                        candidate_best[j].push_back(it2->second);
                     }
+                    
                     // try making neighbor add me
-                    maybe_add(new_best[it1->second], it1->second, j, gnn_, nodes);
+                    candidate_best[it1->second].push_back(j);
                 }
             }
 
-            best = new_best;
+            for (int j = 0; j < nodes.size(); ++j) {
+                for (int k = 0; k < candidate_best[j].size(); ++k) {
+                    maybe_add(best[j], j, candidate_best[j][k], gnn_, nodes);
+                }
+            }
         }
 
         int added = 0;
