@@ -9,16 +9,16 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    int nn = 3;
+    int nn = 8;
 
     Matrix<float> dataset;
     Matrix<float> query;
     
-    load_from_file(dataset, "dataset.hdf5","dataset");
-    load_from_file(query, "dataset.hdf5","query");
+    //load_from_file(dataset, "dataset.hdf5","dataset");
+    //load_from_file(query, "dataset.hdf5","query");
 
-    //load_from_file(dataset, "sift100K.h5", "dataset");
-    //load_from_file(query, "sift100K.h5", "query");
+    load_from_file(dataset, "sift100K.h5", "dataset");
+    load_from_file(query, "sift100K.h5", "query");
     
     //Matrix<int> indices(new int[query.rows*nn], query.rows, nn);
     //Matrix<float> dists(new float[query.rows*nn], query.rows, nn);
@@ -41,9 +41,10 @@ int main(int argc, char** argv)
     vector<vector<int> > indicesNNGraph;
     vector<vector<float> > distNNGraph;
 
+    cerr << "cols: " << dataset.cols << endl;
     cerr << "rows: " << dataset.rows << endl;
     //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
-    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(100, true, 6, 6, 6));
+    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(500, true, 9, 9, 9));
     
     cerr << "building index" << endl;
     indexG.buildIndex();
