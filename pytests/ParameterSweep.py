@@ -39,15 +39,16 @@ construction = []
 trees = []
 
 if(algnum == 0):
-	construction = [20, 25, 30, 35, 40, 45]
+	construction = [300]
 	#construction = [50,75,100,300,500,750,1000]
 elif(algnum == 1):
-	construction = [3,4,5,6,7,8,9,10,12,15,17,20,23,25]
+	construction = [3,4,5,6,7,8,9,10,12,15,17,20,23,25,27,30,35,40,50]
 elif(algnum == 2):
 	construction = [4, 6, 8, 10,14,18,20,25,30]
 	trees = [2, 4, 6, 8]
 elif(algnum ==3):
-	construction = [10,12,14,16,18,20]
+	construction = [10]
+	trees = [250]
 process = subprocess.Popen(['./linear_test', str(knn), fin, sys.argv[4]], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE) 
 
 process.wait();
@@ -56,33 +57,37 @@ lin = h5py.File(sys.argv[4], "r")
 
 ldset = lin['result']
 
-if(algnum < 2):
-		for const in construction:
-			try:
-				os.remove(tmpfile)
-			except:
-				pass
-			process = subprocess.Popen([executable, str(knn), str(const), fin,tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-			process.wait();
+if(algnum == 0):
+	#exact graph
+	for const in construction:
+		try:
+			os.remove(tmpfile)
+		except:
+			pass
+		process = subprocess.Popen([executable, str(knn), str(const), fin,tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+		process.wait();
+		poutput = process.stdout.readline()
+		first = True
+		tooutput = []
+		ts = []
+		es = []
+		while poutput != '':
+			s = poutput.strip()
+			if first:
+				testtime = s
+				first = False
+			else:
+				s = s.split(',')
+				if len(s) == 3:
+					tooutput.append([const, s[2]])
+					ts.append(s[0])
+					es.append(s[1])	
+					#print toutput[len(tooutput)-1]
 			poutput = process.stdout.readline()
-			first = True
-			checks = 0
-			tooutput = []
-			while poutput != '':
-				s = poutput.strip()
-				if first:
-					testtime = s
-					first = False
-				else:
-					s = s.split(',')
-					if len(s) == 2:
-						tooutput.append([const, s[0], s[1]])	
-						#print toutput[len(tooutput)-1]
-						checks = checks + 1
-				poutput = process.stdout.readline()
-			f = h5py.File(tmpfile, "r")
-			for k in range(checks):
-				testdset = f[tmpfile + str(k)]
+		f = h5py.File(tmpfile, "r")
+		for t in range(len(t)):
+			for l in range(len(es)):
+				testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
 				count = 0;
 				for index in range(len(ldset)):
 					for i in range(len(ldset[index])):
@@ -90,9 +95,47 @@ if(algnum < 2):
 							if(ldset[index][i] == testdset[index][j]):
 								count += 1
 				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
-				strout = str(testtime) + "," + str(tooutput[k][0]) + "," + str(tooutput[k][1]) + "," + str(tooutput[k][2]) + "," + str(accuracy) + "\n"
+				strout = str(testtime)  + "," + str(tooutput[t*len(es)+l][0]) + "," + str(tooutput[t*len(es)+l][1]) + "," + str(ts[t]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
 				print strout
 				output.write(strout)
+elif(algnum == 1):
+	#rand kd trees
+	for const in construction:
+		try:
+			os.remove(tmpfile)
+		except:
+			pass
+		process = subprocess.Popen([executable, str(knn), str(const), fin,tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+		process.wait();
+		poutput = process.stdout.readline()
+		first = True
+		checks = 0
+		tooutput = []
+		while poutput != '':
+			s = poutput.strip()
+			if first:
+				testtime = s
+				first = False
+			else:
+				s = s.split(',')
+				if len(s) == 2:
+					tooutput.append([const, s[0], s[1]])	
+					#print toutput[len(tooutput)-1]
+					checks = checks + 1
+			poutput = process.stdout.readline()
+		f = h5py.File(tmpfile, "r")
+		for k in range(checks):
+			testdset = f[tmpfile + str(k)]
+			count = 0;
+			for index in range(len(ldset)):
+				for i in range(len(ldset[index])):
+					for j in range(len(testdset[index])):
+						if(ldset[index][i] == testdset[index][j]):
+							count += 1
+			accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+			strout = str(testtime) + "," + str(tooutput[k][0]) + "," + str(tooutput[k][1]) + "," + str(tooutput[k][2]) + "," + str(accuracy) + "\n"
+			print strout
+			output.write(strout)
 elif(algnum == 2):
 	for const in construction:
 		for tree in trees:
@@ -132,41 +175,44 @@ elif(algnum == 2):
 				print strout
 				output.write(strout)
 elif(algnum == 3):
+	#Approx graph
 	for alpha1 in construction:
-		try:
-			os.remove(tmpfile)
-		except:
-			pass
-		gnn = int(alpha1*alpha1*alpha1/2)
-		print "alpha1 = " + str(alpha1) + " gnn = " + str(gnn)
-		process = subprocess.Popen([executable, str(knn), str(gnn), str(alpha1), str(alpha1), str(alpha1), fin, tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-		process.wait();
-		poutput = process.stdout.readline()
-		first = True
-		checks = 0
-		tooutput = []
-		while poutput != '':
-			s = poutput.strip()
-			if first:
-				testtime = s
-				first = False
-			else:
-				s = s.split(',')
-				if len(s) == 2:
-					tooutput.append([gnn, alpha1, s[0], s[1]])
-					print toutput[len(tooutput)-1]
-					checks = checks + 1
+		for gnn in trees:
+			try:
+				os.remove(tmpfile)
+			except:
+				pass
+			process = subprocess.Popen([executable, str(knn), str(gnn), str(alpha1), str(alpha1), str(alpha1), fin, tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+			process.wait();
 			poutput = process.stdout.readline()
-		f = h5py.File(tmpfile, "r")
-		for k in range(checks):
-			testdset = f[tmpfile + str(k)]
-			count = 0;
-			for index in range(len(ldset)):
-				for i in range(len(ldset[index])):
-					for j in range(len(testdset[index])):
-						if(ldset[index][i] == testdset[index][j]):
-							count += 1
-			accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
-			strout = str(testtime) + "," + str(tooutput[k][0]) + "," + str(tooutput[k][1]) + "," + str(tooutput[k][2]) +"," + str(tooutput[k][3]) + "," + str(accuracy) + "\n"
-			print strout
-		output.write(strout)
+			first = True
+			tooutput = []
+			es = []
+			ts = []
+			while poutput != '':
+				s = poutput.strip()
+				if first:
+					traintime = s
+					first = False
+				else:
+					s = s.split(',')
+					if len(s) == 3:
+						tooutput.append([gnn, alpha1, s[2]])
+						es.append(s[1])
+						ts.append(s[0])
+				poutput = process.stdout.readline()
+			f = h5py.File(tmpfile, "r")
+			print "Should print soon"
+			for t in range(len(ts)):
+				for l in range(len(es)):
+					testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
+					count = 0;
+					for index in range(len(ldset)):
+						for i in range(len(ldset[index])):
+							for j in range(len(testdset[index])):
+								if(ldset[index][i] == testdset[index][j]):
+									count += 1
+					accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+					strout = str(traintime) + "," + str(tooutput[t*len(es) + l][0]) + "," + str(tooutput[t*len(es) + l][1]) + "," + str(tooutput[t*len(es)+l][2]) + "," + str(ts[t]) + "," + str(es[l]) + "," + str(accuracy) + "\n"
+					print strout
+					output.write(strout)

@@ -41,6 +41,7 @@
 #include <cmath>
 #include <set>
 #include <iostream>
+#include <algorithm>
 
 #include "flann/general.h"
 #include "flann/algorithms/nn_index.h"
@@ -237,10 +238,12 @@ public:
     {
         //Number of graph expansions
 		int e = searchParams.e;
+
+		int t = searchParams.t;
 		
 		int maxChecks = searchParams.checks;
 
-        graphSearch(result, vec, nodes_, maxChecks, e);
+        graphSearch(result, vec, nodes_, maxChecks, e, t);
 		
     }
 
@@ -251,7 +254,8 @@ protected:
      */
     void buildIndexImpl()
     {
-        nodes_.resize(size_);
+        srand(time(NULL));
+		nodes_.resize(size_);
 		createNodes(nodes_);
 		
         if (approx_)
@@ -437,6 +441,8 @@ private:
 				delete[] nt;
 				current.pop();
 			}
+			//Need to shuffle to use e in search. Otherwise will bias against examples late in nodes vector
+			std::random_shuffle(nodes[i]->edgeset.begin(), nodes[i]->edgeset.end());
 		}
 	}
 	
@@ -444,10 +450,9 @@ private:
     /**
      * Performs maxChecks hill climbing searches in the graph starting from random nodes.
      */
-    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const int e) const
+    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const int e, const int t) const
     {
 		//Don't add same node twice
-		srand(time(NULL));
 		int* checked = new int[nodes.size()]();
 		NodeTuple* min = new NodeTuple();
 		for(int i=0; i < maxChecks; i++) {
@@ -464,7 +469,7 @@ private:
 			result_set.addPoint(min->dist, min->node->index);
 			checked[min->node->index] = 1;
 
-			while(1) {	
+			for(int k=0; k<t; k++) {	
 				for(int j=1; j < e && j < current->edgeset.size(); j++) {
 					if(checked[current->edgeset[j]->dest->index] == 0) {
 						checked[current->edgeset[j]->dest->index] = 1;

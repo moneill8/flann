@@ -60,8 +60,8 @@ typedef enum {
 
 struct SearchParams
 {
-	SearchParams(int checks_ = 32, float eps_ = 0.0, bool sorted_ = true, int e_ = 100000 ) :
-    	checks(checks_), eps(eps_), sorted(sorted_), e(e_)
+	SearchParams(int checks_ = 32, float eps_ = 0.0, bool sorted_ = true, int e_ = 100000, int t_ = 10000 ) :
+    	checks(checks_), eps(eps_), sorted(sorted_), e(e_), t(t_)
     {
     	max_neighbors = -1;
     	use_heap = FLANN_Undefined;
@@ -77,6 +77,8 @@ struct SearchParams
     bool sorted;
     //Number of graph node expansions
 	int e;
+	//Number of iterations
+	int t;
 	// maximum number of neighbors radius search should return (-1 for unlimited)
     int max_neighbors;
     // use a heap to manage the result set (default: FLANN_Undefined)
