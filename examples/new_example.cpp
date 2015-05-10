@@ -9,8 +9,8 @@
 
 #define CLOCKS_PER_MS (CLOCKS_PER_SEC / 1000)
 
-#define NUM_ES 4
-#define NUM_TS 10
+#define NUM_ES 8
+#define NUM_TS 5
 
 using namespace flann;
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     // construct a nearest neighbor graph with 10 nearest neighbors
 	Index<L2<float> > index(dataset, flann::GraphIndexParams(gnn));
 
-	int ts[NUM_TS] = {25, 50, 75, 100, 200, 300, 400, 500, 600, 700};
+	int ts[NUM_TS] = {5,8,10,15,25};
 
 	clock_t trainstart = clock();
 
@@ -50,14 +50,14 @@ int main(int argc, char** argv)
 	std::cout << traintime << "\n";
 
 	for(int i=0; i < NUM_TS; i++) {
-		int e = gnn/NUM_ES;
-		for(int j=0; j < NUM_ES; j++) {
+		int e = gnn/3;
+		for(int j=0; j < NUM_ES+1; j++) {
 
 			// do a knn search, using 128 checks, and e = edgeset size
 			SearchParams p = flann::SearchParams();
 			
 			p.e = e;
-			e = e + gnn/NUM_ES;
+			e = e + gnn/(3*(NUM_ES/2));
 			p.t = ts[i];
 			p.use_heap = FLANN_True;
 		

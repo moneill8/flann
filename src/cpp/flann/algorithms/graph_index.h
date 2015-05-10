@@ -442,7 +442,7 @@ private:
 				current.pop();
 			}
 			//Need to shuffle to use e in search. Otherwise will bias against examples late in nodes vector
-			std::random_shuffle(nodes[i]->edgeset.begin(), nodes[i]->edgeset.end());
+			std::reverse(nodes[i]->edgeset.begin(), nodes[i]->edgeset.end());
 		}
 	}
 	
@@ -493,7 +493,7 @@ private:
 			}
 		}
 		delete[] min;
-		delete[] checked;
+		//delete[] checked;
 	}
 
     

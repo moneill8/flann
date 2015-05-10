@@ -3,6 +3,7 @@ import numpy as np
 import subprocess
 import sys
 import os
+from sets import Set
 
 if len(sys.argv) != 7:
 	print 'Usage: ParameterSweep.py knn input-file output-file linear-output algorithm tmpfile\n'
@@ -39,16 +40,16 @@ construction = []
 trees = []
 
 if(algnum == 0):
-	construction = [300]
-	#construction = [50,75,100,300,500,750,1000]
+	#construction = [35,50]
+	construction = [100,200]
 elif(algnum == 1):
-	construction = [3,4,5,6,7,8,9,10,12,15,17,20,23,25,27,30,35,40,50]
+	construction = [1,2,3,4,5,6,7,10,15,20]
 elif(algnum == 2):
 	construction = [4, 6, 8, 10,14,18,20,25,30]
 	trees = [2, 4, 6, 8]
 elif(algnum ==3):
-	construction = [10]
-	trees = [250]
+	construction = [350,500]
+	trees = [7,9]
 process = subprocess.Popen(['./linear_test', str(knn), fin, sys.argv[4]], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE) 
 
 process.wait();
@@ -88,12 +89,16 @@ if(algnum == 0):
 		for l in range(len(es)):
 			testdset = f[tmpfile + str(ts[l]) + "_" + str(es[l])]
 			count = 0;
+			size = 0
 			for index in range(len(ldset)):
+				myset = Set()
 				for i in range(len(ldset[index])):
-					for j in range(len(testdset[index])):
-						if(ldset[index][i] == testdset[index][j]):
-							count += 1
-			accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+					myset.add(ldset[index][i])
+				size = size + len(myset)
+				for i in range(len(testdset[index])):
+					if(testdset[index][i] in myset):
+						count += 1
+			accuracy = (float(count)/(float(size)))
 			strout = str(testtime)  + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(ts[l]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
 			print strout
 			output.write(strout)
@@ -126,12 +131,16 @@ elif(algnum == 1):
 		for k in range(checks):
 			testdset = f[tmpfile + str(k)]
 			count = 0;
+			size = 0
 			for index in range(len(ldset)):
+				myset = Set()
 				for i in range(len(ldset[index])):
-					for j in range(len(testdset[index])):
-						if(ldset[index][i] == testdset[index][j]):
-							count += 1
-			accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+					myset.add(ldset[index][i])
+				size = size + len(myset)
+				for i in range(len(testdset[index])):
+					if(testdset[index][i] in myset):
+						count += 1
+			accuracy = (float(count)/(float(size)))
 			strout = str(testtime) + "," + str(tooutput[k][0]) + "," + str(tooutput[k][1]) + "," + str(tooutput[k][2]) + "," + str(accuracy) + "\n"
 			print strout
 			output.write(strout)
@@ -163,13 +172,17 @@ elif(algnum == 2):
 			f = h5py.File(tmpfile, "r")
 			for k in range(checks):
 				testdset = f[tmpfile + str(k)]
-				count = 0;
+				count = 0
+				size = 0
 				for index in range(len(ldset)):
+					myset = Set()
 					for i in range(len(ldset[index])):
-						for j in range(len(testdset[index])):
-							if(ldset[index][i] == testdset[index][j]):
-								count += 1
-				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+						myset.add(ldset[index][i])
+					size = size + len(myset)
+					for i in range(len(testdset[index])):
+						if(testdset[index][i] in myset):
+							count += 1
+				accuracy = (float(count)/(float(size)))
 				strout = str(testtime) + "," + str(tooutput[k][0]) + "," + str(tooutput[k][1]) + "," + str(tooutput[k][2]) +"," + str(tooutput[k][3]) + "," + str(accuracy) + "\n"
 				print strout
 				output.write(strout)
@@ -201,16 +214,29 @@ elif(algnum == 3):
 						ts.append(s[0])
 				poutput = process.stdout.readline()
 			f = h5py.File(tmpfile, "r")
-			print "Should print soon"
 			for l in range(len(es)):
-				testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
-				count = 0;
+				testdset = f[tmpfile + str(ts[l]) + "_" + str(es[l])]
+				count = 0
+				size = 0
 				for index in range(len(ldset)):
+					myset = Set()
 					for i in range(len(ldset[index])):
-						for j in range(len(testdset[index])):
-							if(ldset[index][i] == testdset[index][j]):
-								count += 1
-				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
-				strout = str(traintime) + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(tooutput[l][2]) + "," + str(ts[l]) + "," + str(es[l]) + "," + str(accuracy) + "\n"
+						myset.add(ldset[index][i])
+					size = size + len(myset)
+					for i in range(len(testdset[index])):
+						if(testdset[index][i] in myset):
+							count += 1
+				accuracy = (float(count)/(float(size)))
+				strout = str(traintime) + "," + str(tooutput[l][2]) + "," + str(accuracy) + "\n"
 				print strout
 				output.write(strout)
+
+try:
+	os.remove(tmpfile)
+except:
+	pass
+
+try:
+	os.remove(sys.argv[4])
+except:
+	pass
