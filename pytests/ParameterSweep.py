@@ -85,19 +85,18 @@ if(algnum == 0):
 					#print toutput[len(tooutput)-1]
 			poutput = process.stdout.readline()
 		f = h5py.File(tmpfile, "r")
-		for t in range(len(t)):
-			for l in range(len(es)):
-				testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
-				count = 0;
-				for index in range(len(ldset)):
-					for i in range(len(ldset[index])):
-						for j in range(len(testdset[index])):
-							if(ldset[index][i] == testdset[index][j]):
-								count += 1
-				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
-				strout = str(testtime)  + "," + str(tooutput[t*len(es)+l][0]) + "," + str(tooutput[t*len(es)+l][1]) + "," + str(ts[t]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
-				print strout
-				output.write(strout)
+		for l in range(len(es)):
+			testdset = f[tmpfile + str(ts[l]) + "_" + str(es[l])]
+			count = 0;
+			for index in range(len(ldset)):
+				for i in range(len(ldset[index])):
+					for j in range(len(testdset[index])):
+						if(ldset[index][i] == testdset[index][j]):
+							count += 1
+			accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+			strout = str(testtime)  + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(ts[l]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
+			print strout
+			output.write(strout)
 elif(algnum == 1):
 	#rand kd trees
 	for const in construction:
@@ -203,16 +202,15 @@ elif(algnum == 3):
 				poutput = process.stdout.readline()
 			f = h5py.File(tmpfile, "r")
 			print "Should print soon"
-			for t in range(len(ts)):
-				for l in range(len(es)):
-					testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
-					count = 0;
-					for index in range(len(ldset)):
-						for i in range(len(ldset[index])):
-							for j in range(len(testdset[index])):
-								if(ldset[index][i] == testdset[index][j]):
-									count += 1
-					accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
-					strout = str(traintime) + "," + str(tooutput[t*len(es) + l][0]) + "," + str(tooutput[t*len(es) + l][1]) + "," + str(tooutput[t*len(es)+l][2]) + "," + str(ts[t]) + "," + str(es[l]) + "," + str(accuracy) + "\n"
-					print strout
-					output.write(strout)
+			for l in range(len(es)):
+				testdset = f[tmpfile + str(ts[t]) + "_" + str(es[l])]
+				count = 0;
+				for index in range(len(ldset)):
+					for i in range(len(ldset[index])):
+						for j in range(len(testdset[index])):
+							if(ldset[index][i] == testdset[index][j]):
+								count += 1
+				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+				strout = str(traintime) + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(tooutput[l][2]) + "," + str(ts[l]) + "," + str(es[l]) + "," + str(accuracy) + "\n"
+				print strout
+				output.write(strout)
