@@ -450,7 +450,7 @@ private:
     /**
      * Performs maxChecks hill climbing searches in the graph starting from random nodes.
      */
-    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, std::vector<NodePtr> nodes, const int maxChecks, const int e, const int t) const
+    void graphSearch(ResultSet<DistanceType>& result_set, const ElementType* vec, const std::vector<NodePtr> &nodes, const int maxChecks, const int e, const int t) const
     {
 		//Don't add same node twice
 		int* checked = new int[nodes.size()]();
