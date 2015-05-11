@@ -7,7 +7,7 @@
 
 #define CLOCKS_PER_MS (CLOCKS_PER_SEC / 1000)
 
-#define NUM_CHECKS 6
+#define NUM_CHECKS 9
 
 using namespace flann;
 
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 
 	char* output = argv[4];
 
-	int checks[NUM_CHECKS] = {1000,1200,1400,1600,1800,2000};
+	int checks[NUM_CHECKS] = {100,200,300,400,600,1000,1200,1400,1600};
 
     Matrix<float> dataset;
     Matrix<float> query;

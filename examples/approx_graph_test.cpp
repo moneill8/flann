@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
 	char* output = argv[7];
 
-	int ts[NUM_TS] = {5,8,10,15,25};
+	int ts[NUM_TS] = {10,25,50,75,100};
 
     Matrix<float> dataset;
     Matrix<float> query;
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 		for(int j=0; j < NUM_ES+1; j++) {
 		// do a knn search, using 128 checks, and e = edgeset size
 			SearchParams p = flann::SearchParams();
-			p.e = e;
+			p.e = gnn;
 			e = e + gnn/(3*(NUM_ES/2));
 			p.t = ts[i];
 			p.use_heap = FLANN_True;
@@ -74,14 +74,13 @@ int main(int argc, char** argv)
 			clock_t testend = clock() - teststart;
 
 			std::stringstream sstm;
-			sstm << output << ts[i] << "_" << p.e;
+			sstm << output << ts[i] << "_" << e;
 
 			flann::save_to_file(indices,output,sstm.str());
 
 			unsigned testtime = testend / CLOCKS_PER_MS;
 
-			std::cout << ts[i] << "," << p.e << "," << testtime << "\n";
-			
+			std::cout << ts[i] << "," << e << "," << testtime << "\n";
 		}
 	}
 	delete[] dataset.ptr();

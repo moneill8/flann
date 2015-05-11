@@ -40,16 +40,22 @@ construction = []
 trees = []
 
 if(algnum == 0):
-	#construction = [35,50]
-	construction = [100,200]
+	construction = [25,35,50]
+	#construction = [100,200]
 elif(algnum == 1):
 	construction = [1,2,3,4,5,6,7,10,15,20]
 elif(algnum == 2):
 	construction = [4, 6, 8, 10,14,18,20,25,30]
 	trees = [2, 4, 6, 8]
 elif(algnum ==3):
-	construction = [350,500]
-	trees = [7,9]
+	construction = [6,8]
+	trees = [50,75,100]
+
+try:
+	os.remove(sys.argv[4])
+except:
+	pass
+
 process = subprocess.Popen(['./linear_test', str(knn), fin, sys.argv[4]], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE) 
 
 process.wait();
@@ -92,10 +98,10 @@ if(algnum == 0):
 			size = 0
 			for index in range(len(ldset)):
 				myset = Set()
-				for i in range(len(ldset[index])):
+				for i in range(knn):
 					myset.add(ldset[index][i])
-				size = size + len(myset)
-				for i in range(len(testdset[index])):
+				size = size + knn
+				for i in range(knn):
 					if(testdset[index][i] in myset):
 						count += 1
 			accuracy = (float(count)/(float(size)))
@@ -134,10 +140,10 @@ elif(algnum == 1):
 			size = 0
 			for index in range(len(ldset)):
 				myset = Set()
-				for i in range(len(ldset[index])):
+				for i in range(knn):
 					myset.add(ldset[index][i])
-				size = size + len(myset)
-				for i in range(len(testdset[index])):
+				size = size + knn
+				for i in range(knn):
 					if(testdset[index][i] in myset):
 						count += 1
 			accuracy = (float(count)/(float(size)))
@@ -187,49 +193,53 @@ elif(algnum == 2):
 				print strout
 				output.write(strout)
 elif(algnum == 3):
-	#Approx graph
-	for alpha1 in construction:
+	#exact graph
+	for const in construction:
 		for gnn in trees:
 			try:
 				os.remove(tmpfile)
 			except:
 				pass
-			process = subprocess.Popen([executable, str(knn), str(gnn), str(alpha1), str(alpha1), str(alpha1), fin, tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+			print str(executable) + " " + str(knn) + " " + str(gnn) + " " + str(const) + " " + str(const) + " "+ str(const) + " " + str(fin) + " " + str(tmpfile)
+			process = subprocess.Popen([executable, str(knn), str(gnn), str(const), str(const), str(const), fin,tmpfile], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 			process.wait();
 			poutput = process.stdout.readline()
 			first = True
 			tooutput = []
-			es = []
 			ts = []
+			es = []
 			while poutput != '':
 				s = poutput.strip()
+				print s
 				if first:
-					traintime = s
+					testtime = s
 					first = False
 				else:
 					s = s.split(',')
 					if len(s) == 3:
-						tooutput.append([gnn, alpha1, s[2]])
-						es.append(s[1])
+						tooutput.append([const, s[2]])
 						ts.append(s[0])
+						es.append(s[1])	
+						#print toutput[len(tooutput)-1]
 				poutput = process.stdout.readline()
 			f = h5py.File(tmpfile, "r")
-			for l in range(len(es)):
-				testdset = f[tmpfile + str(ts[l]) + "_" + str(es[l])]
+			l = 0
+			for name in f:
+				testdset = f[name]
 				count = 0
-				size = 0
 				for index in range(len(ldset)):
-					myset = Set()
-					for i in range(len(ldset[index])):
-						myset.add(ldset[index][i])
-					size = size + len(myset)
-					for i in range(len(testdset[index])):
-						if(testdset[index][i] in myset):
-							count += 1
-				accuracy = (float(count)/(float(size)))
-				strout = str(traintime) + "," + str(tooutput[l][2]) + "," + str(accuracy) + "\n"
+					for i in range(knn):
+						for j in range(knn):
+							if(testdset[index][j] == ldset[index][i]):
+								count += 1
+				print str(count) + " " + str(len(ldset)) + " " + str(len(ldset[0]))
+				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+				print accuracy
+				strout = str(testtime)  + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(ts[l]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
 				print strout
 				output.write(strout)
+				l = l + 1
+
 
 try:
 	os.remove(tmpfile)
