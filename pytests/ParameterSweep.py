@@ -49,7 +49,7 @@ elif(algnum == 2):
 	trees = [2, 4, 6, 8]
 elif(algnum ==3):
 	construction = [6,8]
-	trees = [50,75,100]
+	trees = [10,15]
 
 try:
 	os.remove(sys.argv[4])
@@ -232,8 +232,7 @@ elif(algnum == 3):
 						for j in range(knn):
 							if(testdset[index][j] == ldset[index][i]):
 								count += 1
-				print str(count) + " " + str(len(ldset)) + " " + str(len(ldset[0]))
-				accuracy = (float(count)/(float(len(ldset)*len(ldset[0]))))
+				accuracy = (float(count)/(float(len(ldset)*knn)))
 				print accuracy
 				strout = str(testtime)  + "," + str(tooutput[l][0]) + "," + str(tooutput[l][1]) + "," + str(ts[l]) + "," + str(es[l])+ "," + str(accuracy) + "\n"
 				print strout

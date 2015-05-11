@@ -4,12 +4,19 @@
 
 #include <stdio.h>
 
+#define CLOCKS_PER_MS (CLOCKS_PER_SEC / 1000)
+
 using namespace flann;
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    int nn = 8;
+    int nn = atoi(argv[1]);
+
+	int gnn = atoi(argv[2]);
+	
+	int alpha = atoi(argv[3]);
+	
 
     Matrix<float> dataset;
     Matrix<float> query;
@@ -27,9 +34,21 @@ int main(int argc, char** argv)
     vector<vector<float> > dist;
 
     Index<L2<float> > index(dataset, flann::LinearIndexParams());
-    index.buildIndex();                                                                                               
+    clock_t trainstart = clock();
+
+	index.buildIndex();                                                                                               
+	clock_t trainend = clock() - trainstart;
+
+	unsigned traintime = trainend / CLOCKS_PER_MS;                         
+
+	clock_t teststart = clock();
 
     index.knnSearch(query, indices, dist, nn, flann::SearchParams());
+
+	clock_t testend = clock() - teststart;
+
+	unsigned testtime = testend / CLOCKS_PER_MS;                         
+
 
     vector<set<int> > truth(indices.size());
     for (int i = 0; i < indices.size(); ++i) {
@@ -41,14 +60,10 @@ int main(int argc, char** argv)
     vector<vector<int> > indicesNNGraph;
     vector<vector<float> > distNNGraph;
 
-    cerr << "cols: " << dataset.cols << endl;
-    cerr << "rows: " << dataset.rows << endl;
     //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
-    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(500, true, 9, 9, 9));
+    Index<L2<float> > indexG(dataset, flann::GraphIndexParams(gnn, true, alpha, alpha, alpha));
     
-    cerr << "building index" << endl;
     indexG.buildIndex();
-    cerr << "index built" << endl;
 
     indexG.knnSearch(query, indicesNNGraph, distNNGraph, nn, flann::SearchParams());
 
@@ -62,7 +77,7 @@ int main(int argc, char** argv)
 
     int total = indices.size() * indices[0].size();
 
-    cerr << (double)correct / total << endl;
+    cout << traintime << "," << testtime << "," << (double)correct / total << endl;
 
     //flann::save_to_file(indices,"result.hdf5","result");
 

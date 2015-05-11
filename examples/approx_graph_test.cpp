@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
 	char* output = argv[7];
 
-	int ts[NUM_TS] = {10,25,50,75,100};
+	int ts[NUM_TS] = {4,5,6,7,10};
 
     Matrix<float> dataset;
     Matrix<float> query;
