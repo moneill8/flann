@@ -1,0 +1,434 @@
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec832546320/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec832546320.dir/build.make CMakeFiles/cmTryCompileExec832546320.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec832546320.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED   -o CMakeFiles/cmTryCompileExec832546320.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec832546320.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec832546320/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec128894892/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec128894892.dir/build.make CMakeFiles/cmTryCompileExec128894892.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec128894892.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -fopenmp   -o CMakeFiles/cmTryCompileExec128894892.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec128894892.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec128894892/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2867055308/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2867055308.dir/build.make CMakeFiles/cmTryCompileExec2867055308.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2867055308.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED /openmp   -o CMakeFiles/cmTryCompileExec2867055308.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: no such file or directory: '/openmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec2867055308.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec2867055308/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2688294676/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2688294676.dir/build.make CMakeFiles/cmTryCompileExec2688294676.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2688294676.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -Qopenmp   -o CMakeFiles/cmTryCompileExec2688294676.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: unknown argument: '-Qopenmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec2688294676.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec2688294676/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3355163153/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3355163153.dir/build.make CMakeFiles/cmTryCompileExec3355163153.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3355163153.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -openmp   -o CMakeFiles/cmTryCompileExec3355163153.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec3355163153.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec3355163153/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3990003881/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3990003881.dir/build.make CMakeFiles/cmTryCompileExec3990003881.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3990003881.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -xopenmp   -o CMakeFiles/cmTryCompileExec3990003881.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: language not recognized: 'openmp'
+clang: warning: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c: 'linker' input unused
+make[1]: *** [CMakeFiles/cmTryCompileExec3990003881.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec3990003881/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec524862077/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec524862077.dir/build.make CMakeFiles/cmTryCompileExec524862077.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec524862077.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED +Oopenmp   -o CMakeFiles/cmTryCompileExec524862077.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: no such file or directory: '+Oopenmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec524862077.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec524862077/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3230880795/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3230880795.dir/build.make CMakeFiles/cmTryCompileExec3230880795.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3230880795.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -qsmp   -o CMakeFiles/cmTryCompileExec3230880795.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: unknown argument: '-qsmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec3230880795.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec3230880795/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec4173926250/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec4173926250.dir/build.make CMakeFiles/cmTryCompileExec4173926250.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4173926250.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DOpenMP_FLAG_DETECTED -mp   -o CMakeFiles/cmTryCompileExec4173926250.dir/src.c.o   -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.c
+clang: error: unknown argument: '-mp'
+make[1]: *** [CMakeFiles/cmTryCompileExec4173926250.dir/src.c.o] Error 1
+make: *** [cmTryCompileExec4173926250/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1131694007/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec1131694007.dir/build.make CMakeFiles/cmTryCompileExec1131694007.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1131694007.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED   -o CMakeFiles/cmTryCompileExec1131694007.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec1131694007.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec1131694007/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2216898342/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2216898342.dir/build.make CMakeFiles/cmTryCompileExec2216898342.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2216898342.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -fopenmp   -o CMakeFiles/cmTryCompileExec2216898342.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec2216898342.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec2216898342/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3330728144/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3330728144.dir/build.make CMakeFiles/cmTryCompileExec3330728144.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3330728144.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED /openmp   -o CMakeFiles/cmTryCompileExec3330728144.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: no such file or directory: '/openmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec3330728144.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec3330728144/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3626156807/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3626156807.dir/build.make CMakeFiles/cmTryCompileExec3626156807.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3626156807.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -Qopenmp   -o CMakeFiles/cmTryCompileExec3626156807.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-Qopenmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec3626156807.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec3626156807/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3112840434/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3112840434.dir/build.make CMakeFiles/cmTryCompileExec3112840434.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3112840434.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -openmp   -o CMakeFiles/cmTryCompileExec3112840434.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+/Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx:2:10: fatal error: 'omp.h' file not found
+#include <omp.h>
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTryCompileExec3112840434.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec3112840434/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2174665437/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2174665437.dir/build.make CMakeFiles/cmTryCompileExec2174665437.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2174665437.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -xopenmp   -o CMakeFiles/cmTryCompileExec2174665437.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: language not recognized: 'openmp'
+clang: warning: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx: 'linker' input unused
+make[1]: *** [CMakeFiles/cmTryCompileExec2174665437.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec2174665437/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec168213494/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec168213494.dir/build.make CMakeFiles/cmTryCompileExec168213494.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec168213494.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED +Oopenmp   -o CMakeFiles/cmTryCompileExec168213494.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: no such file or directory: '+Oopenmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec168213494.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec168213494/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2342820051/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2342820051.dir/build.make CMakeFiles/cmTryCompileExec2342820051.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2342820051.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -qsmp   -o CMakeFiles/cmTryCompileExec2342820051.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-qsmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec2342820051.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec2342820051/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+
+Performing C++ SOURCE FILE Test OpenMP_FLAG_DETECTED failed with the following output:
+Change Dir: /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec785711240/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec785711240.dir/build.make CMakeFiles/cmTryCompileExec785711240.dir/build
+/Volumes/cmake-3.2.2-Darwin-x86_64/CMake.app/Contents/bin/cmake -E cmake_progress_report /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec785711240.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -DOpenMP_FLAG_DETECTED -mp   -o CMakeFiles/cmTryCompileExec785711240.dir/src.cxx.o -c /Users/Bryce/GitHub/flann/flann/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-mp'
+make[1]: *** [CMakeFiles/cmTryCompileExec785711240.dir/src.cxx.o] Error 1
+make: *** [cmTryCompileExec785711240/fast] Error 2
+
+Source file was:
+
+#include <omp.h>
+int main() {
+#ifdef _OPENMP
+  return 0;
+#else
+  breaks_on_purpose
+#endif
+}
+

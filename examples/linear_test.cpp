@@ -25,6 +25,7 @@ int main(int argc, char** argv)
     Matrix<float> dataset;
     Matrix<float> query;
     load_from_file(dataset, input,"dataset");
+    
     load_from_file(query, input,"query");
 
     Matrix<int> indices(new int[query.rows*nn], query.rows, nn);

@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     // construct a nearest neighbor graph with 10 nearest neighbors
 	Index<L2<float> > index(dataset, flann::GraphIndexParams(gnn));
 
-	int ts[NUM_TS] = {5,8,10,15,25};
+	int ts[NUM_TS] = {15,50,100,250,500};
 
 	clock_t trainstart = clock();
 

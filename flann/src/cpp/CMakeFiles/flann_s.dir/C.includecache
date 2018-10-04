@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4.c
+endian.h
+-
+intrin.h
+-
+stdlib.h
+-
+string.h
+-
+lz4.h
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4.h
+stdint.h
+-
+
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4.h
+
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4hc.c
+stdlib.h
+-
+string.h
+-
+endian.h
+-
+intrin.h
+-
+lz4hc.h
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4hc.h
+lz4.h
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4.h
+stdint.h
+-
+
+/Users/Bryce/GitHub/flann/src/cpp/flann/ext/lz4hc.h
+

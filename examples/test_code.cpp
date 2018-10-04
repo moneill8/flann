@@ -9,6 +9,35 @@
 using namespace flann;
 using namespace std;
 
+void test(vector<set<int> > &truth, int nn, int e, int t, Index<L2<float> > &indexG, Matrix<float> &query) {
+    vector<vector<int> > indicesNNGraph;
+    vector<vector<float> > distNNGraph;
+
+    clock_t graphteststart = clock();
+
+    flann::SearchParams params;
+    params.t = t;
+    params.e = e;
+
+    indexG.knnSearch(query, indicesNNGraph, distNNGraph, nn, params);
+    clock_t graphtestend = clock() - graphteststart;
+    unsigned graphtesttime = graphtestend / CLOCKS_PER_MS;
+
+    int correct = 0;
+    for (int i = 0; i < indicesNNGraph.size(); ++i) {
+        for (int j = 0; j < indicesNNGraph[i].size(); ++j) {
+            if (truth[i].count(indicesNNGraph[i][j]))
+                ++correct;
+        }
+    }
+
+    int total = indicesNNGraph.size() * indicesNNGraph[0].size();
+
+    cout << "e = " << e << ", t = " << t << endl;
+    cout << "Graph time: " << graphtesttime << endl;
+    cout << "Graph accuracy: " << (double)correct / total << endl;
+}
+    
 int main(int argc, char** argv)
 {
     int nn = atoi(argv[1]);
@@ -34,12 +63,9 @@ int main(int argc, char** argv)
     vector<vector<float> > dist;
 
     Index<L2<float> > index(dataset, flann::LinearIndexParams());
-    clock_t trainstart = clock();
 
 	index.buildIndex();                                                                                               
-	clock_t trainend = clock() - trainstart;
 
-	unsigned traintime = trainend / CLOCKS_PER_MS;                         
 
 	clock_t teststart = clock();
 
@@ -57,34 +83,24 @@ int main(int argc, char** argv)
         }
     }
 
-    vector<vector<int> > indicesNNGraph;
-    vector<vector<float> > distNNGraph;
-
-    //Index<L2<float> > indexG(dataset, flann::GraphIndexParams(10, 10));
     Index<L2<float> > indexG(dataset, flann::GraphIndexParams(gnn, true, alpha, alpha, alpha));
-    
+
+    clock_t trainstart = clock();
     indexG.buildIndex();
+	clock_t trainend = clock() - trainstart;
+	unsigned traintime = trainend / CLOCKS_PER_MS;                         
 
-    indexG.knnSearch(query, indicesNNGraph, distNNGraph, nn, flann::SearchParams());
+    cout << "Train time: " << traintime << endl;
+    cout << "Linear time: " << testtime << endl;
 
-    int correct = 0;
-    for (int i = 0; i < indicesNNGraph.size(); ++i) {
-        for (int j = 0; j < indicesNNGraph[i].size(); ++j) {
-            if (truth[i].count(indicesNNGraph[i][j]))
-                ++correct;
+    int e[] = {10, 15, 20, 30, 50, 75, 100};
+    int t[] = {1, 3, 5, 10, 20, 40};
+
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            test(truth, nn, e[i], t[j], indexG, query);
         }
     }
 
-    int total = indices.size() * indices[0].size();
-
-    cout << traintime << "," << testtime << "," << (double)correct / total << endl;
-
-    //flann::save_to_file(indices,"result.hdf5","result");
-
-    /*delete[] dataset.ptr();
-    delete[] query.ptr();
-    delete[] indices.ptr();
-    delete[] dists.ptr();*/
-    
     return 0;
 }

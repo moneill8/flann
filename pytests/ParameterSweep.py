@@ -51,11 +51,13 @@ elif(algnum ==3):
 	construction = [6,8]
 	trees = [10,15]
 
-try:
-	os.remove(sys.argv[4])
-except:
-	pass
+#try:
+#	os.remove(sys.argv[4])
+#except:
+#	pass
 
+tree = [50,100,200,500,750]
+construction = [7,9]
 process = subprocess.Popen(['./linear_test', str(knn), fin, sys.argv[4]], stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE) 
 
 process.wait();
@@ -140,10 +142,10 @@ elif(algnum == 1):
 			size = 0
 			for index in range(len(ldset)):
 				myset = Set()
-				for i in range(knn):
+				for i in range(len(ldset[index])):
 					myset.add(ldset[index][i])
-				size = size + knn
-				for i in range(knn):
+				size = size + len(ldset[index])
+				for i in range(len(ldset[index])):
 					if(testdset[index][i] in myset):
 						count += 1
 			accuracy = (float(count)/(float(size)))
